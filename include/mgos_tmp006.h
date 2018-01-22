@@ -15,6 +15,9 @@
 extern "C" {
 #endif
 
+/*
+ * Conversion rate for the TMP006 sensor, see `mgos_tmp006_setup()`.
+ */
 enum tmp006_conversion_rate {
   TMP006_CONV_4 = 0,
   TMP006_CONV_2,
@@ -23,11 +26,32 @@ enum tmp006_conversion_rate {
   TMP006_CONV_1_4,
 };
 
+/*
+ * Invalid voltage or temperature value, see `mgos_tmp006_get_voltage()` and
+ * `mgos_tmp006_get_die_temp()`
+ */
 #define TMP006_INVALID_READING (-1000.0)
 
+/*
+ * Initialize TMP006 driver on the given I2C `bus` and `addr`, with
+ * the given conversion rate (see `enum tmp006_conversion_rate`). To enable
+ * `DRDY` pin, set `drdy_en` to `true`.
+ *
+ * Returns `true` in case of success, `false` otherwise.
+ */
 bool mgos_tmp006_setup(struct mgos_i2c *bus, uint8_t addr,
                        enum tmp006_conversion_rate rate, bool drdy_en);
+
+/*
+ * Get voltage from the TMP006 sensor at the given i2c bus and addr. In case of
+ * failure, returns `TMP006_INVALID_READING`.
+ */
 double mgos_tmp006_get_voltage(struct mgos_i2c *i2c, uint8_t addr);
+
+/*
+ * Get temperature in C degrees from the TMP006 sensor at the given i2c bus and
+ * addr. In case of failure, returns `TMP006_INVALID_READING`.
+ */
 double mgos_tmp006_get_die_temp(struct mgos_i2c *i2c, uint8_t addr);
 
 #ifdef __cplusplus
